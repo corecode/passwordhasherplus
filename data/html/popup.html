@@ -1,5 +1,5 @@
 <!--
-/* ***** BEGIN LICENSE BLOCK *****
+    /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -36,13 +36,15 @@
 -->
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.8.17.custom.css"/>
-<style>
+<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.17.custom.css"/>
+<style type="text/css">
 * { font-family: Arial; font-size: 12px; }
 </style>
-<script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="common.js"></script>
-<script type="text/javascript" src="lib/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript" src="../lib/compat.js"></script>
+<script type="text/javascript" src="../lib/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../../lib/utils.js"></script>
+<script type="text/javascript" src="../lib/common.js"></script>
+<script type="text/javascript" src="../lib/jquery-ui-1.8.17.custom.min.js"></script>
 </head>
 
 <body>
@@ -87,7 +89,7 @@
 		</tr>
 	</table>
 	<hr/>
-	<a href="javascript:void(0)" onclick="chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/options.html'})" title="Extension options" id="link-options">Options</a>
+	<a href="javascript:void(0)" onclick="compat.createOptionsTab()" title="Extension options" id="link-options">Options</a>
 </div>
 </body>
 
@@ -105,18 +107,18 @@ function writeModel () {
 	}
 	config.policy.length = $('#length').val ();
 	config.policy.strength = $('#strength').val ();
-	chrome.extension.getBackgroundPage ().saveConfig (url, config);
+	compat.saveConfig(url, config);
 }
 window.onunload = writeModel;
 
-function readModel () {
+function readModel (tags) {
 	$('#tag').val (config.tag);
-	$('#tag').autocomplete ({ source: chrome.extension.getBackgroundPage ().loadTags () });
+	$('#tag').autocomplete ({ source: tags });
 	$('#length').val (config.policy.length);
 	$('#strength').val (config.policy.strength);
 	if (true == config.options.compatibilityMode) {
 		$('div#compatmodeheader').html ("<b>Compatibility:</b>");
-		$('div#compatmode').text ("on");
+$('div#compatmode').text ("on");
 	} else if (null == config.policy.seed) {
 		$('#tag').val ("compatible:" + config.tag);
 	}
@@ -126,11 +128,11 @@ function readModel () {
 	}
 }
 
-chrome.tabs.getSelected (null, function (tab) {
-	url = chrome.extension.getBackgroundPage ().grepUrl (tab.url);
-	config = chrome.extension.getBackgroundPage ().loadConfig (url);
-	config.fields = toSet (config.fields);
-	readModel ();
+compat.loadConfig(function(url_, config_, tags_) {
+        url = url_;
+        config = config_;
+        config.fields = toSet(config.fields);
+        readModel(tags_);
 });
 
 $('#bump').click (function () {

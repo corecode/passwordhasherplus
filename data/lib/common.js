@@ -35,14 +35,6 @@
 
 var debug = false;
 
-String.prototype.startsWith = function (str) {
-	return (this.match ("^" + str) == str);
-}
-
-String.prototype.substringAfter = function (str) {
-	return (this.substring (this.indexOf (str) + str.length));
-}
-
 var Set = function () {}
 Set.prototype.add = function (o) { this[o] = true; }
 Set.prototype.remove = function (o) { delete this[o]; }
@@ -55,20 +47,8 @@ function toSet (array) {
 	return s;
 }
 
-function toArray (s) {
-	return Object.keys (s);
-}
-
-var default_length = 8;
-var default_strength = 2;
-
-function generateGuid () {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace (/[xy]/g, function(c) {
-		var r = Math.random ()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-		return v.toString (16);
-	}).toUpperCase ();
-}
-
+// XXX this function is only used by content-script.js and the portable page
+// should pull out the rest into a separate file.
 function generateHash (config, input) {
 	var tag = config.tag;
 
@@ -111,24 +91,7 @@ function bump (tag) {
 		bump += parseInt (matcher[3]);
 	}
 	if (compatible) {
-		tag = "compatible:" + tag;
+	    tag = "compatible:" + tag;
 	}
 	return tag + ":" + bump;
-}
-
-function grepUrl (url) {
-	//^(?:[^.]+\.){0,1}((?:[^.]+\.)*(?:[^.]+))\.(?:[^.]{2,15})$
-	//http://www.regexplanet.com/simple/index.html
-	var reg = new RegExp ("^https?://(?:([^:\\./ ]+?)|([0-9]{1,3}(?:\\.[0-9]{1,3}){3})|(?:[^:./ ]+\\.){0,1}((?:[^:./ ]+\\.)*(?:[^:. /]+))\\.(?:[^:. /]{2,15}))(?::\\d+)?/.*$");
-	var m = reg.exec (url);
-	try {
-		for (var i = 0; i < 3; ++i) {
-			if (null != m[i+1]) {
-				return m[i+1];
-			}
-		}
-		throw "unmatched";
-	} catch (e) {
-		return "chrome";
-	}
 }

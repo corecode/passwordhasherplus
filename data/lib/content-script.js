@@ -34,8 +34,6 @@
  * ***** END LICENSE BLOCK ***** */
 var config;
 
-var port = chrome.extension.connect ({name: "passhash"});
-
 var id = 0;
 
 var fields = new Array ();
@@ -208,7 +206,7 @@ function bind (f) {
 			}
 		}
 		if (true == save) {
-			port.postMessage ({url: location.href, save: config});
+			compat.saveUrlConfig(config);
 		}
 	}
 
@@ -275,7 +273,7 @@ function bind (f) {
 				if (ctrlDown)  e.which += ctrl;
 				switch (e.which) {
 					case ctrl + shift + 51: // ctrl + #
-					case ctrl + 117: // ctrl + f6 
+					case ctrl + 117: // ctrl + f6
 						toggleHashing (true);
 					break;
 					case ctrl + shift + 56: // ctrl + *
@@ -333,7 +331,7 @@ function onNodeInserted (evt) {
 	addEventListeners ();
 }
 
-port.onMessage.addListener (function (msg) {
+compat.onRecvConfig(function (msg) {
 	if (null != msg.update) {
 		if (debug) console.log ("Config updated " + JSON.stringify (msg.update));
 		config = msg.update;
@@ -353,4 +351,4 @@ port.onMessage.addListener (function (msg) {
 	}
 });
 
-port.postMessage ({init: true, url:location.href});
+compat.loadUrlConfig();
