@@ -74,7 +74,7 @@ if (typeof(chrome) !== "undefined" && typeof(chrome.extension) !== "undefined") 
     };
 
     compat.createOptionsTab = function() {
-        chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/options.html'});
+        chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/data/html/options.html'});
     };
 } else {
     var port;

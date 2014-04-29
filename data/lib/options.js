@@ -42,7 +42,6 @@
  */
 
 function setNewGuid () {
-    alert("in setnewguid");
     $("#seed").val(generateGuid());
 }
 
@@ -111,16 +110,23 @@ function cleanupStorage() {
     });
 }
 
-$("#seedbtn").click(setNewGuid);
-$("#saveopts").click(saveOptions);
-$("#restoreopts").click(restoreOptions);
-$("#cleanupstorage").click(cleanupStorage);
-$("#clearstorage").click(function() {
-    clearStorage();
+// Add event listeners once the DOM has fully loaded by listening for the
+// `DOMContentLoaded` event on the document, and adding your listeners to
+// specific elements when it triggers.
+document.addEventListener('DOMContentLoaded', function () {
+    restoreOptions();
     refreshStorage();
-});
-$("#loadstorage").click(loadStorage);
-$("#refreshstorage").click(refreshStorage);
 
-restoreOptions();
-refreshStorage();
+    $("#generate").click(setNewGuid);
+    $("#backupSave").click(saveOptions);
+    $("#backupRevert").click(restoreOptions);
+    $("#removeUnUsedTags").click(cleanupStorage);
+    $("#dbClear").click(function() {
+        clearStorage();
+        refreshStorage();
+    });
+    $("#dbSave").click(loadStorage);
+    $("#dbRevert").click(refreshStorage);
+
+    $('#portablePage').click(function() {chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/data/html/passhashplus.html'});});
+});
