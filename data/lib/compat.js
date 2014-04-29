@@ -13,6 +13,18 @@ if (typeof(chrome) !== "undefined" && typeof(chrome.extension) !== "undefined") 
 	};
     };
 
+    compat.loadUrlConfig = function() {
+	compat.port.emit({init: true, url: location.href});
+    };
+
+    compat.saveUrlConfig = function(config) {
+        compat.port.emit({url: location.href, save: config});
+    };
+
+    compat.onRecvConfig = function(cb) {
+	compat.port.onMsg(cb);
+    };
+
     compat.loadConfig = function(cb) {
         chrome.tabs.getSelected (null, function (tab) {
             var bgp = chrome.extension.getBackgroundPage();
