@@ -88,6 +88,10 @@ if (typeof(chrome) !== "undefined" && typeof(chrome.extension) !== "undefined") 
     compat.createOptionsTab = function() {
         chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/data/html/options.html'});
     };
+
+    compat.createOptionsTab = function() {
+	chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/data/html/passhashplus.html?tag=' + $('#tag').val()});
+    };
 } else {
     var port;
 

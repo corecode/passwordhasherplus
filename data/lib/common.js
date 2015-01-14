@@ -35,7 +35,7 @@
 
 var debug = false;
 
-var Set = function() {}
+var Set = function() {};
 Set.prototype.add = function(o) { this[o] = true; };
 Set.prototype.remove = function(o) { delete this[o]; };
 
@@ -44,6 +44,11 @@ if (typeof String.prototype.startsWith != 'function') {
 	return this.indexOf(str) == 0;
     };
 }
+
+var default_length = 16;
+var default_strength = 2;
+var default_hashkey = "Ctrl+Shift+51";
+var default_maskkey = "Ctrl+Shift+56";
 
 function toSet(array) {
     var s = new Set();
@@ -98,4 +103,11 @@ function bump(tag) {
 	tag = "compatible:" + tag;
     }
     return tag + ":" + bump;
+}
+
+// http://stackoverflow.com/questions/7731778/jquery-get-query-string-parameters
+function queryParam(key) {
+    key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+    var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
+    return match && decodeURIComponent(match[1].replace(/\+/g, " "));
 }

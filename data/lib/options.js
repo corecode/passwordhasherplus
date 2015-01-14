@@ -52,6 +52,8 @@ function saveOptions () {
     options.compatibilityMode = $("#compatibility").val();
     options.privateSeed = $("#seed").val();
     options.backedUp = $("#backedup").val();
+    options.hashKey = $("#hashkey").val();
+    options.maskKey = $("#maskkey").val();
     compat.saveOptions(options, function() {
         refreshStorage();
     });
@@ -64,6 +66,8 @@ function restoreOptions(cb) {
         $("#compatibility").val(options.compatibilityMode);
         $("#seed").val(options.privateSeed);
 	$("#backedup").val(options.backedUp);
+        $("#hashkey").val(options.hashKey);
+        $("#maskkey").val(options.maskKey);
         if (typeof(cb) === 'function') {
             cb();
         }
@@ -110,6 +114,19 @@ function cleanupStorage() {
     });
 }
 
+function setShortcut(action, e) {
+    if (e.which == 16 || e.which == 17)
+	return;
+    if (action == "hash")
+	hk = $('#hashkey');
+    if (action == "mask")
+	hk = $('#maskkey');
+    if (e.which != 0)
+	hk.val((e.ctrlKey ? "Ctrl+" : "") + (e.shiftKey ? "Shift+" : "") + e.which);
+    else
+	hk.val(action == "hash" ? "Ctrl+Shift+51" : "Ctrl+Shift+56");
+}
+
 // Add event listeners once the DOM has fully loaded by listening for the
 // `DOMContentLoaded` event on the document, and adding your listeners to
 // specific elements when it triggers.
@@ -129,4 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
     $("#dbRevert").click(refreshStorage);
 
     $('#portablePage').click(function() {chrome.tabs.create({url:'chrome-extension://'+location.hostname+'/data/html/passhashplus.html'});});
+
+    $('#hashkey').keydown(function(e) {setShortcut("hash", e)});
+    $('#maskkey').keydown(function(e) {setShortcut("mask", e)});
+    $('#haskeydefault').click(function() {var e = new Object(); e.which=0; setShortcut("hash", e);});
+    $('#maskkeydefault').click(function() {var e = new Object(); e.which=0; setShortcut("mask", e);});
 });
