@@ -299,10 +299,6 @@ function bind (f) {
 	return true;
 }
 
-$("input[type=password]").each (function (index) {
-	bind (this);
-});
-
 var observer = new MutationObserver(onNodeInserted);
 
 function addEventListeners () {
@@ -312,6 +308,11 @@ function addEventListeners () {
 function removeEventListeners () {
 	observer.disconnect();
 }
+
+addEventListeners();
+$("input[type=password]").each (function (index) {
+	bind (this);
+});
 
 var setHashEvt = document.createEvent ("HTMLEvents");
 setHashEvt.initEvent ('sethash', true, true);
@@ -347,7 +348,6 @@ compat.onRecvConfig(function (msg) {
 				fields[i].dispatchEvent (setHashEvt);
 			}
 		}
-		addEventListeners ();
 	}
 });
 

@@ -39,6 +39,12 @@ var Set = function() {}
 Set.prototype.add = function(o) { this[o] = true; };
 Set.prototype.remove = function(o) { delete this[o]; };
 
+if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str){
+	return this.indexOf(str) == 0;
+    };
+}
+
 function toSet(array) {
     var s = new Set();
     for(var i = 0; i < array.length; ++i) {
