@@ -291,7 +291,7 @@ rehashEvt.initEvent ('rehash', true, true);
 function onNodeInserted (mutations) {
 	removeEventListeners ();
 	mutations.forEach(function(mutation) {
-		$(mutation.addedNodes).find("input[type=password]").each (function (index) {
+		$(mutation.addedNodes).find("input[type=password]").andSelf().filter("input[type=password]").each (function (index) {
 			if (bind (this) && config && this.id in config.fields) {
 				this.dispatchEvent (setHashEvt);
 			}

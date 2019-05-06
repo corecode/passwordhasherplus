@@ -4,10 +4,12 @@ var config;
 function writeModel () {
 	config.tag = $('#tag').val ();
 	if (config.tag.startsWith ("compatible:")) {
-		config.tag = config.tag.substringAfter ("compatible:");
+		config.tag = substringAfter (config.tag, "compatible:");
 		delete config.policy.seed;
 	} else {
-		config.policy.seed = config.options.privateSeed;
+		if (null == config.policy.seed) {
+			config.policy.seed = config.options.privateSeed;
+		}
 	}
 	config.policy.length = $('#length').val ();
 	config.policy.strength = $('#strength').val ();

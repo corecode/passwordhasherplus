@@ -122,21 +122,23 @@ $( document ).ready(function () {
       } //if (script.type == "text/javascript")
     });
 
-    $('#database').text(dumpDatabase()); //2
+    // XXX compat not defined here
+    compat.loadStorage(function(entries) {
+      $('#database').text(JSON.stringify(entries)); //2
 
-    $.when.apply(null, gettings).done(function(){ //3
-      var uriContent = "data:application/octet-stream,"
-                       + encodeURIComponent($('html').html());
-      $('#save').attr('href', uriContent); //3.a
-      $('#savediv').css('display','block'); //3.b
-      invariant_startup_code();
-      var siteTag = queryParam("tag");
-      if (null != siteTag) {
-        $("#urls").val(siteTag);
-        selectionChanged();
-      }
+      $.when.apply(null, gettings).done(function(){ //3
+        var uriContent = "data:application/octet-stream,"
+              + encodeURIComponent($('html').html());
+        $('#save').attr('href', uriContent); //3.a
+        $('#savediv').css('display','block'); //3.b
+        invariant_startup_code();
+        var siteTag = queryParam("tag");
+        if (null != siteTag) {
+          $("#urls").val(siteTag);
+          selectionChanged();
+        }
+      });
     });
-
   }
 }); //end of $(document).ready()
 
