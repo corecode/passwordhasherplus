@@ -267,6 +267,10 @@ function bind (f) {
 	return true;
 }
 
+$("input[type=password]").each (function (index) {
+	bind (this);
+});
+
 var setHashEvt = document.createEvent ("HTMLEvents");
 setHashEvt.initEvent ('sethash', true, true);
 
@@ -282,7 +286,7 @@ function onMutation (mutations, observer) {
 			} else {
 				$("input[type=password]", item).each(function (i) {
 					bind(this);
-				})
+				});
 			}
 		}
 	});
